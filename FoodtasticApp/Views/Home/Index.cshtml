@@ -1,31 +1,91 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<FoodtasticApp.Models.AspNetProducts>
+
+@{
     ViewBag.Title = "Home Page";
+    int? a = 0;
 }
+@if (User.Identity.GetUserName() == "admin@admin.a")
+{
+    <br />
+    <div class="row">
+        <h1>Quelques chiffres</h1>
+        <br />
+        @foreach (var p in Model)
+        {
+            a += p.Count;
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+        }
+        <p>@a  produits en stock :</p>
+        @foreach (var c in Model)
+        {
+            <div class="row">
+                <div class="col-md-4">@c.Name</div>
+                <div class="col-md-2">@c.Count</div>
+                <div class="col-md-2">@c.Price$</div>
+            </div>
+        }
+    </div>
+    <p>
+        <h1>Gestion avancée</h1>
+        @Html.ActionLink("Gérer les produits", "Index", "AspNetProducts")
+    </p>
+    
+}
+else
+{
+    <div>
+        <div class="spacing">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group" id="adv-search">
+                        <input type="text" class="form-control setright" placeholder="Searching for something ?" />
+                        <div class="input-group-btn">
+                            <div class="btn-group" role="group">
+                                <div class="dropdown dropdown-lg">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                                    <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <form class="form-horizontal" role="form">
+                                            <div class="form-group row">
+                                                <label class="col-md-6" for="filter">Catégorie</label>
+                                                <select class="col-md-6 form-control">
+                                                    <option value="0" selected>Tous</option>
+                                                    <option value="1">Boissons</option>
+                                                    <option value="2">Fromage</option>
+                                                    <option value="3">Fermier</option>
+                                                    <option value="4">Plats</option>
+                                                    <option value="4">Viande</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-6" for="contain">Contient les mots</label>
+                                                <input class="form-control col-md-6" type="text" />
+                                            </div>
+                                            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+        <div class="row">
+            @foreach (var n in Model)
+            {
+                <div class="col-md-4 white" style="background-image: url('../../Images/products/@n.Img');">
+                    <h2>@n.Name</h2>
+                    <p>@n.Description</p>
+                    <b>@n.Price €</b>
+                    
+                </div>
+            }
+            
+
+        </div>
+    </div> //partie noadmin
+}
